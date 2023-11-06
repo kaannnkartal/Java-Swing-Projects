@@ -1,0 +1,59 @@
+package View;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JButton;
+
+public class BashekimGUI extends JFrame {
+
+	private JPanel w_pane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BashekimGUI frame = new BashekimGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public BashekimGUI() {
+		setBackground(Color.WHITE);
+		setResizable(false);
+		setTitle("Hastane Yönetim Sistemi");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 750, 500);
+		w_pane = new JPanel();
+		w_pane.setBackground(Color.WHITE);
+		w_pane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(w_pane);
+		w_pane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Hoşgeldiniz, Sayın");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblNewLabel.setBounds(10, 24, 250, 54);
+		w_pane.add(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("Çıkış Yap");
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnNewButton.setBounds(487, 41, 114, 21);
+		w_pane.add(btnNewButton);
+	}
+}

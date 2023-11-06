@@ -1,0 +1,268 @@
+package Model;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class Bashekim extends User {
+	
+	Statement st = null;
+	ResultSet rs  = null;
+	PreparedStatement ps = null;
+	Connection con = conn.conDB();
+	
+	ArrayList<User> doctorList = null;
+	ArrayList<Clinic> clinicList = null;
+
+	public Bashekim(int id, String tcno, String name, String password, String type) {
+		super(id, tcno, name, password, type);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Bashekim() {
+		
+	}
+	
+/*	public boolean addClinic(String clinicName) throws SQLException {
+		
+		
+		st = con.createStatement();
+		
+		String query = "INSERT INTO clinic (name) VALUES (?)";
+			
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, clinicName);
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			st.close();
+			ps.close();
+			rs.close();
+			con.close();
+		}
+		
+		
+		
+		
+		
+		return false;
+	}   */
+	
+	
+	/*public ArrayList<Clinic> getClinicList() throws SQLException {
+		
+		Connection con = conn.conDB();
+		clinicList = new ArrayList();
+		Object clinic;
+		
+		st = con.createStatement();
+		
+		String query = "SELECT * FROM clinic";
+		
+		rs = st.executeQuery(query);
+		
+		while(rs.next()) {
+			
+			clinic = new Clinic(rs.getInt("id"), rs.getString("name"));
+			
+			clinicList.add((Clinic) clinic);
+		
+		}
+		
+		
+		return clinicList;
+		
+	}*/
+	
+	public boolean updateDoctor(int id, String tcno, String password,String name) throws SQLException {
+		//isValueChange(id,name,tcno,password);
+		String query = "UPDATE user SET name = ?, tcno = ?, password = ? WHERE id = ?";
+		try {
+			st = con.createStatement();
+						
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, name);	
+			ps.setString(2, tcno);
+			ps.setString(3, password);
+			ps.setInt(4, id);
+			ps.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			st.close();
+			rs.close();
+			con.close();
+		}
+		
+		
+		return false;
+
+	}
+	
+	public ArrayList getOldValues(int id,String nameSurname, String Tcno, String password) throws SQLException {
+		
+		ArrayList oldValues = new ArrayList();
+		Connection con = conn.conDB();
+		int tempId = id;
+		
+		st = con.createStatement();
+		
+		rs = st.executeQuery("SELECT * FROM user WHERE type = 'doktor' AND id = "+tempId+" ");
+		
+		rs.next();
+		oldValues.add(rs.getString("name"));
+		oldValues.add(rs.getString("tcno"));
+		oldValues.add(rs.getString("password"));
+		
+		
+
+		
+		
+		
+		return oldValues;
+	}
+	
+	public boolean deleteDoctor(int doctorID) throws SQLException {
+		
+		String query = "DELETE FROM user WHERE id = ?";
+		
+		try {
+			st = con.createStatement();
+			//st.executeQuery("INSERT INTO user (tcno, password, name, type) VALUES ('"+Tcno+"', 'password', 'nameSurname', 'Doktor')");
+			
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			ps.setInt(1,doctorID);	
+
+			ps.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			st.close();
+			rs.close();
+			con.close();
+		}
+		
+		
+		return false;
+	}
+	
+	
+	public boolean addDoctor(String nameSurname, String Tcno, String password) throws SQLException {
+		
+		Connection con = conn.conDB();
+		
+		//String last = Integer.toString(lastId);
+		try {
+			String query = "INSERT INTO user (tcno, password, name, type) VALUES (?, ?, ?, ?)";
+			st = con.createStatement();
+			//st.executeQuery("INSERT INTO user (tcno, password, name, type) VALUES ('"+Tcno+"', 'password', 'nameSurname', 'Doktor')");
+			
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			ps.setString(1,Tcno); 
+			ps.setString(2,password); 
+			ps.setString(3,nameSurname); 
+			ps.setString(4,"Doktor"); 
+			ps.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			st.close();
+			rs.close();
+			con.close();
+		}
+		
+		
+		
+		return false;
+		
+		
+	}
+	
+
+	
+	public ArrayList<User> getDoctorList() throws SQLException{
+		
+		
+		doctorList = new ArrayList<User>();
+		
+		Connection con = conn.conDB();
+		
+		User obj;
+		
+		try {
+			st= con.createStatement();
+			rs = st.executeQuery("SELECT * FROM user WHERE type = 'doktor'");
+			
+			while(rs.next()) {
+				obj = new User(rs.getInt("id"), rs.getString("tcno"), rs.getString("name"), rs.getString("password"), rs.getString("type"));
+				
+				doctorList.add(obj);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			st.close();
+			rs.close();
+			con.close();
+		}
+		
+		
+		return doctorList;
+	}
+	
+public boolean addWorker(int user_id, int clinic_id) throws SQLException {
+		
+		Connection con = conn.conDB();
+		
+		//String last = Integer.toString(lastId);
+		try {
+			String query = "INSERT INTO worker (user_id,clinic_id) VALUES (?, ?, ?, ?)";
+			st = con.createStatement();
+			//st.executeQuery("INSERT INTO user (tcno, password, name, type) VALUES ('"+Tcno+"', 'password', 'nameSurname', 'Doktor')");
+			
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			ps.setString(1,Tcno); 
+			ps.setString(2,password); 
+			ps.setString(3,nameSurname); 
+			ps.setString(4,"Doktor"); 
+			ps.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			st.close();
+			rs.close();
+			con.close();
+		}
+		
+		
+		
+		return false;
+		
+		
+	}
+
+}
